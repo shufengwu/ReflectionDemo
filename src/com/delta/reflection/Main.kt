@@ -1,9 +1,6 @@
 package com.delta.reflection
 
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.memberFunctions
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.superclasses
+import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaField
 import kotlin.reflect.jvm.javaGetter
 import kotlin.reflect.jvm.jvmName
@@ -133,6 +130,7 @@ fun main(args: Array<String>) {
     //isOdd函数类型为(Int)->Boolean
     //组合后(String)->Boolean
     fun length(s: String) = s.length //(String)->Int
+
     val oddLength = compose(::isOdd, ::length)
     val strings = listOf("aghj", "abghj", "abckfjgk")
     println(strings.filter(oddLength))
@@ -192,6 +190,56 @@ fun main(args: Array<String>) {
     //属性绑定
     val prop = "abc"::length
     println(prop.get())   // 输出“3”
+
+
+    println("-----------------------------注解----------------------------------")
+    println()
+
+    println("类上的指定注解：")
+    val myfancy = c1.findAnnotation<Fancy>()
+    println("${myfancy?.myName}----${myfancy?.myAge}")
+
+    val myAddress = c1.findAnnotation<Address>()
+    println("${myAddress?.address}")
+    println()
+
+    println("类上所有注解：")
+    val annos = c1.annotations
+    println(annos)
+
+    val myfan = annos.elementAt(0) as Fancy
+    println("${myfan.myName}----${myfan.myAge}")
+
+    val myaddr = annos.elementAt(1) as Address
+    println(myaddr.address)
+
+    println("-----------------------------属性的注解----------------------------------")
+    val property = Student::school.findAnnotation<Address>()
+    println(property?.address)
+    println()
+
+    println("-----------------------------方法的注解----------------------------------")
+    val func = Student::testStudent.annotations
+    println(func)
+
+    val funTest = Student::testStudent.findAnnotation<Address>()
+    println(funTest?.address)
+    Student::testStudent.invoke(student, "${funTest?.address}")
+    println()
+
+    println("-----------------------------方法参数的注解----------------------------------")
+
+    val value_para = Student::testStudent.findParameterByName("str")
+    println(value_para?.annotations)
+    println(value_para?.findAnnotation<Address>()?.address)
+    println()
+
+
+    println("-----------------------------字段的注解----------------------------------")
+    val field = Student::f
+    println(field.annotations)
+    println(field.findAnnotation<Address>()?.address)
+    println()
 
 }
 

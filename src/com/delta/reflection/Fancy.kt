@@ -5,6 +5,6 @@ package com.delta.reflection
  */
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION,
         AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.EXPRESSION)
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
-annotation class Fancy
+annotation class Fancy(val myName: String, val myAge: Int)
